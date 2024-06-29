@@ -21,6 +21,37 @@ def get_connection():
         return None
 
 
+def add_user(username, password_hash):
+    conn = get_connection()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            query = f"insert into users (username, password_hash) values ('{username}', '{password_hash}')"
+            cursor.execute(query)
+            conn.commit()
+        except Error as e:
+            st.error(f"Error adding user: {e}")
+        finally:
+            cursor.close()
+            conn.close()
+
+
+def check_user(username, password_hash):
+    conn = get_connection()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            query = f"select * from users where username = '{username}' and password_hash = '{password_hash}'"
+            cursor.execute(query)
+            return cursor.fetchone() is not None
+        except Error as e:
+            st.error(f"Error checking user: {e}")
+        finally:
+            cursor.close()
+            conn.close()
+    return False
+
+
 def add_word(username, word):
     # conn = get_connection()
     # c = conn.cursor()
