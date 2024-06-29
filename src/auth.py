@@ -18,7 +18,7 @@ def authenticate():
             if check_user(username, hash_password(password)):
                 st.session_state.username = username
                 st.success("Logged in successfully!")
-                # st.rerun()
+                st.rerun()
             else:
                 st.error("Incorrect username or password.")
     elif choice == "Sign up":
