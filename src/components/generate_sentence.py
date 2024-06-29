@@ -7,3 +7,7 @@ def generateSentence():
         return
     st.title("Generate Sentence")
     st.write("Coming soon!")
+
+
+if __name__ == "__main__":
+    generateSentence()

@@ -6,7 +6,6 @@ from mysql.connector import Error
 from config import DB_HOST, DB_NAME, DB_USER, DB_PASSWORD
 
 
-@st.cache_resource
 def get_connection():
     try:
         conn = mysql.connector.connect(
@@ -23,17 +22,19 @@ def get_connection():
 
 def add_user(username, password_hash):
     conn = get_connection()
-    cursor = None
     if conn:
         try:
             cursor = conn.cursor()
-            query = f"insert into users (username, password_hash) values ('{username}', '{password_hash}')"
-            cursor.execute(query)
+            # query = f"insert into users (username, password_hash) values ('{username}', '{password_hash}')"
+            # cursor.execute(query)
+            query = "INSERT INTO users (username, password_hash) VALUES (%s, %s)"  # 修正箇所
+            cursor.execute(query, (username, password_hash))  # 修正箇所
             conn.commit()
         except Error as e:
             st.error(f"Error adding user: {e}")
         finally:
-            cursor.close()
+            if cursor is not None:
+                cursor.close()
             conn.close()
 
 
@@ -43,13 +44,16 @@ def check_user(username, password_hash):
     if conn:
         try:
             cursor = conn.cursor()
-            query = f"select * from users where username = '{username}' and password_hash = '{password_hash}'"
-            cursor.execute(query)
+            # query = f"select * from users where username = '{username}' and password_hash = '{password_hash}'"
+            # cursor.execute(query)
+            query = "SELECT * FROM users WHERE username = %s AND password_hash = %s"  # 修正箇所
+            cursor.execute(query, (username, password_hash))  # 修正箇所
             return cursor.fetchone() is not None
         except Error as e:
             st.error(f"Error checking user: {e}")
         finally:
-            cursor.close()
+            if cursor is not None:
+                cursor.close()
             conn.close()
     return False
 

@@ -9,7 +9,7 @@ from st_on_hover_tabs import on_hover_tabs
 
 
 def main():
-    st.set_page_config(page_title="Scanglish", page_icon="🔍")
+    st.set_page_config(layout="wide", page_title="Scanglish", page_icon="🔍")
 
     if st.session_state.username is None:
         authenticate()
@@ -17,8 +17,7 @@ def main():
         # page = st.sidebar.radio("", ["画像スキャン", "単語帳", "文章生成"])
         # if st.sidebar.button("画像スキャン"):
         #     word_search()
-        st.header("Custom tab component for on-hover navigation bar")
-        st.markdown("<style>" + open("src/style.css").read() + "</style>", unsafe_allow_html=True)
+        st.markdown("<style>" + open("static/style.css").read() + "</style>", unsafe_allow_html=True)
 
         with st.sidebar:
             tabs = on_hover_tabs(
