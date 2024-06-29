@@ -95,7 +95,7 @@ coverage/
 .venv
 
 # Ignore pip virtual environment folder (Python 2.7 or earlier)
-.env/
+.env
 
 # Ignore pip, pipenv, poetry generated files
 pip-log.txt
