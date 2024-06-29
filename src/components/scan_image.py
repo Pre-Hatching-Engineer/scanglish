@@ -1,8 +1,9 @@
-import streamlit as st
 import io
 import re
 import sys
+
 import pytesseract
+import streamlit as st
 from PIL import Image
 
 
@@ -24,8 +25,7 @@ def image_to_text(image):
 def text_cleaning(text):
     # textをすべて小文字に変換
     text = text.lower()
-    # textから記号を削除
-    text = re.sub(r"[^\w\s]|[\d]", "", text)
+    text = re.sub(r"[^a-z]", "", text)
     # 空白ごとにsetに変換し、重複を削除
     words = set(text.split())
     return words
