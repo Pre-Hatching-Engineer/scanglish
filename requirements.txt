@@ -1,3 +1,6 @@
 streamlit 
 streamlit-authenticator
 python-dotenv
+mysql-connector-python
+pytesseract
+pillow
