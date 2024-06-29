@@ -1,8 +1,9 @@
-import streamlit as st
 import io
 import re
 import sys
+
 import pytesseract
+import streamlit as st
 from PIL import Image
 
 
