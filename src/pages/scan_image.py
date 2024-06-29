@@ -1,4 +1,5 @@
 import io
+import re
 import sys
 
 import pytesseract
@@ -22,6 +23,16 @@ def image_to_text(image):
     return text
 
 
+def text_cleaning(text):
+    # textをすべて小文字に変換
+    text = text.lower()
+    # textから記号を削除
+    text = re.sub(r"[^\w\s]", "", text)
+    # 空白ごとにsetに変換し、重複を削除
+    words = set(text.split())
+    return words
+
+
 st.title("Scan your image")
 
 # サイドバーナビゲーション
@@ -34,6 +45,9 @@ col1, col2 = st.columns(2)
 with col1:
     st.header("Upload Image")
     uploaded_file = st.file_uploader("画像をアップロード", type=["png", "jpg", "jpeg"])
+    if uploaded_file is not None:
+        # アップロードされた画像を表示
+        st.image(uploaded_file, caption="Uploaded Image.", use_column_width=True)
 
 # col2にテキストを表示
 with col2:
@@ -42,3 +56,5 @@ with col2:
         text = image_to_text(uploaded_file)
         st.write(text)
         words = extract_words(uploaded_file)
+        words = text_cleaning(" ".join(words))
+        st.write(words)
