@@ -1,21 +1,28 @@
 import streamlit as st
 import hashlib
+from database import add_user, check_user
+
+
+def hash_password(password):
+    return hashlib.sha256(password.encode()).hexdigest()
 
 
 def authenticate():
     st.title("Login")
-    username = st.text_input("Username")
-    password = st.text_input("Password", type="password")
-    if st.button("Login"):
-        if check_credentials(username, password):
-            st.session_state.username = username
-            st.success("Logged in successfully!")
-        else:
-            st.error("Incorrect username or password")
+    choice = st.radio("sign up or login", ("Sign up", "Login"))
 
-
-def check_credentials(username, password):
-    # 実際のアプリケーションではデータベースでチェックします
-    # これはデモ用の簡単な実装です
-    hashed_password = hashlib.sha256(password.encode()).hexdigest()
-    return username == "demo" and hashed_password == hashlib.sha256("password".encode()).hexdigest()
+    if choice == "Login":
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
+        if st.button("Login"):
+            if check_user(username, hash_password(password)):
+                st.session_state.username = username
+                st.success("Logged in successfully!")
+            else:
+                st.error("Incorrect username or password.")
+    elif choice == "Sign up":
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
+        if st.button("Sign up"):
+            add_user(username, hash_password(password))
+            st.success("User added successfully!")
