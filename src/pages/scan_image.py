@@ -27,7 +27,7 @@ def text_cleaning(text):
     # textをすべて小文字に変換
     text = text.lower()
     # textから記号を削除
-    text = re.sub(r"[^\w\s]", "", text)
+    text = re.sub(r"[^\w\s]|[\d]", "", text)
     # 空白ごとにsetに変換し、重複を削除
     words = set(text.split())
     return words
@@ -55,6 +55,9 @@ with col2:
     if uploaded_file is not None:
         text = image_to_text(uploaded_file)
         st.write(text)
-        words = extract_words(uploaded_file)
-        words = text_cleaning(" ".join(words))
-        st.write(words)
+        words = text_cleaning(text)
+        print(words)
+        print(type(words))
+        words_list = list(words)
+        st.write(words_list)
+        print(type(words_list))
