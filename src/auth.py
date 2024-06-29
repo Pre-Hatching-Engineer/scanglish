@@ -9,7 +9,7 @@ def hash_password(password):
 
 def authenticate():
     st.title("Login")
-    choice = st.radio("sign up or login", ("Sign up", "Login"))
+    choice = st.radio("sign up or login", ("Login", "Sign up"))
 
     if choice == "Login":
         username = st.text_input("Username")
@@ -18,6 +18,7 @@ def authenticate():
             if check_user(username, hash_password(password)):
                 st.session_state.username = username
                 st.success("Logged in successfully!")
+                # st.rerun()
             else:
                 st.error("Incorrect username or password.")
     elif choice == "Sign up":
