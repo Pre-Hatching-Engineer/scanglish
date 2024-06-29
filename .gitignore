@@ -1,0 +1,102 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+# 通常、PyInstallerを使用してビルドした場合に生成されるディレクトリ
+dist/
+build/
+*.spec
+
+# Django
+*.log
+local_settings.py
+
+# Flask
+instance/
+.webassets-cache
+
+# Scrapy
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+.Pipfile.lock
+
+# poetry
+poetry.lock
+
+# Environment variables
+.env
+
+# IDEs
+.idea/
+.vscode/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Python dotenv
+.env
+
+# Python bytecode
+*.pyc
+*.pyo
+
+# pytest
+pytest_cache/
+coverage/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+
+# Ignore pipenv virtual environment folder (Python 3.3 or later)
+.venv
+
+# Ignore pip virtual environment folder (Python 2.7 or earlier)
+.env/
+
+# Ignore pip, pipenv, poetry generated files
+pip-log.txt
+pip-delete-this-directory.txt
