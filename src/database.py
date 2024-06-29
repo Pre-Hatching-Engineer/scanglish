@@ -23,6 +23,7 @@ def get_connection():
 
 def add_user(username, password_hash):
     conn = get_connection()
+    cursor = None
     if conn:
         try:
             cursor = conn.cursor()
@@ -38,6 +39,7 @@ def add_user(username, password_hash):
 
 def check_user(username, password_hash):
     conn = get_connection()
+    cursor = None
     if conn:
         try:
             cursor = conn.cursor()
