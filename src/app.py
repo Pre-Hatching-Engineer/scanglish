@@ -1,14 +1,11 @@
 import streamlit as st
 
-from pages import dashboard, word_input, word_search, generate_sentence
+from pages import dashboard, scan_image, word_search, generate_sentence
 from auth import authenticate
-from database import init_db
 
 
 def main():
     st.set_page_config(page_title="Scanglish", page_icon="🔍")
-
-    init_db()
 
     if "username" not in st.session_state:
         authenticate()
@@ -18,7 +15,7 @@ def main():
 
         pages = {
             "ダッシュボード": dashboard,
-            "画像読み込み": word_input,
+            "画像読み込み": scan_image,
             "単語帳": word_search,
             "文章生成": generate_sentence,
         }
