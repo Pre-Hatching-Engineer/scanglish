@@ -13,3 +13,7 @@ def wordSearch():
             st.success(f"'{search}' is in your word list!")
         else:
             st.error(f"'{search}' is not in your word list.")
+
+
+if __name__ == "__main__":
+    wordSearch()
