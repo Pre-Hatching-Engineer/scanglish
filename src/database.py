@@ -1,32 +1,37 @@
-import sqlite3
 import streamlit as st
+import mysql.connector
+from mysql.connector import Error
 
-
-def init_db():
-    conn = sqlite3.connect("english_learning.db")
-    c = conn.cursor()
-    c.execute(
-        """CREATE TABLE IF NOT EXISTS words
-                 (username TEXT, word TEXT)"""
-    )
-    conn.commit()
-    conn.close()
+# configのインポート
+from config import DB_HOST, DB_NAME, DB_USER, DB_PASSWORD
 
 
 @st.cache_resource
 def get_connection():
-    return sqlite3.connect("english_learning.db", check_same_thread=False)
+    try:
+        conn = mysql.connector.connect(
+            host=DB_HOST,
+            database=DB_NAME,
+            user=DB_USER,
+            password=DB_PASSWORD,
+        )
+        return conn
+    except Error as e:
+        st.error(f"Error connecting to MySQL: {e}")
+        return None
 
 
 def add_word(username, word):
-    conn = get_connection()
-    c = conn.cursor()
-    c.execute("INSERT INTO words VALUES (?, ?)", (username, word))
-    conn.commit()
+    # conn = get_connection()
+    # c = conn.cursor()
+    # c.execute("INSERT INTO words VALUES (?, ?)", (username, word))
+    # conn.commit()
+    pass
 
 
 def get_user_words(username):
-    conn = get_connection()
-    c = conn.cursor()
-    c.execute("SELECT word FROM words WHERE username = ?", (username,))
-    return [row[0] for row in c.fetchall()]
+    # conn = get_connection()
+    # c = conn.cursor()
+    # c.execute("SELECT word FROM words WHERE username = ?", (username,))
+    # return [row[0] for row in c.fetchall()]
+    pass
