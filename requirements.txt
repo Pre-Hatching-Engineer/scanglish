@@ -3,3 +3,4 @@ streamlit-authenticator
 python-dotenv
 mysql-connector-python
 pytesseract
+streamlit-on-Hover-tabs

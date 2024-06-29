@@ -1,27 +1,40 @@
 import streamlit as st
 
-from pages import dashboard, scan_image, word_search, generate_sentence
+# セッションの初期化
+if "username" not in st.session_state:
+    st.session_state.username = None
 from auth import authenticate
+from conponents import word_search, generate_sentence, scan_image
+from st_on_hover_tabs import on_hover_tabs
 
 
 def main():
     st.set_page_config(page_title="Scanglish", page_icon="🔍")
 
-    if "username" not in st.session_state:
+    if st.session_state.username is None:
         authenticate()
     else:
+        # page = st.sidebar.radio("", ["画像スキャン", "単語帳", "文章生成"])
+        # if st.sidebar.button("画像スキャン"):
+        #     word_search()
+        st.header("Custom tab component for on-hover navigation bar")
+        st.markdown("<style>" + open("src/style.css").read() + "</style>", unsafe_allow_html=True)
+
+        with st.sidebar:
+            tabs = on_hover_tabs(
+                tabName=["画像読み込み", "単語帳", "文章生成"],
+                iconName=["📸", "📚", "📝"],
+                default_choice=0,
+            )
+
+        if tabs == "画像読み込み":
+            scan_image.scanImage()
+        elif tabs == "単語帳":
+            word_search.wordSearch()
+        elif tabs == "文章生成":
+            generate_sentence.generateSentence()
         st.sidebar.title(f"Welcome, {st.session_state['username']}!")
         st.sidebar.button("Logout", on_click=logout)
-
-        pages = {
-            "ダッシュボード": dashboard,
-            "画像読み込み": scan_image,
-            "単語帳": word_search,
-            "文章生成": generate_sentence,
-        }
-
-        page = st.sidebar.radio("ナビゲーション", list(pages.keys()))
-        pages[page](st.session_state.username)
 
 
 def logout():
