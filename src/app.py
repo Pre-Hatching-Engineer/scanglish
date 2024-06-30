@@ -33,7 +33,9 @@ def main():
             word_search.wordSearch()
         elif tabs == "文章生成":
             generate_sentence.generateSentence()
-        st.sidebar.markdown(f"<h1 style='color: white;'>Welcome, {st.session_state['username']}!</h1>", unsafe_allow_html=True)
+        st.sidebar.markdown(
+            f"<h1 style='color: white;'>Welcome, {st.session_state['username']}!</h1>", unsafe_allow_html=True
+        )
         st.sidebar.button("Logout", on_click=logout)
 
 
