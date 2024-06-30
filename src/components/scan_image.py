@@ -1,6 +1,7 @@
 import io
 import re
 import sys
+import os
 import requests
 import pytesseract
 import streamlit as st
@@ -21,17 +22,24 @@ def image_to_text(image):
     text = pytesseract.image_to_string(img, lang="jpn")
     return text
 
+def load_stopwords():
+    with open('src/components/stopwords.txt', 'r') as file:
+        stopwords = set(line.strip() for line in file)
+    return stopwords
 
-def text_cleaning(text):
+def text_cleaning(text, stopwords):
     # textをすべて小文字に変換
     text = text.lower()
     # アルファベットとスペース以外の文字を削除
     text = re.sub(r"[^a-z ]", "", text)
     # スペースを改行に変換
     text = text.replace(" ", "\n")
-    # 改行ごとに分割し、重複を削除
-    words = set(text.split("\n"))
-    return words
+    # 改行ごとに分割し、空の要素を除外し、重複を削除
+    words = set(word for word in text.split("\n") if word)
+    # stopwordsを除外
+    cleaned_words = [word for word in words if word not in stopwords]
+    return cleaned_words
+
 
 def get_translation(words_list):
     # 翻訳後のリストを取得する
@@ -76,15 +84,12 @@ def scanImage():
         if uploaded_file is not None:
             text = image_to_text(uploaded_file)
             st.write(text)
-            words = text_cleaning(text)
-            print(words)
-            print(type(words))
+            stopwords = load_stopwords()
+            words = text_cleaning(text, stopwords)
             words_list = list(words)
             st.write(words_list)
-            print(type(words_list))
             get_translation(words_list)
             st.write(get_translation(words_list))
-            # print(get_translation(words_list))
 
 
 if __name__ == "__main__":
