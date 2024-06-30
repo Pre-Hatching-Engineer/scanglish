@@ -60,6 +60,39 @@ def check_user(username, password_hash):
             conn.close()
     return False
 
+def get_user_id(username):
+    conn = get_connection()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            query = "SELECT user_id FROM users WHERE username = %s"
+            cursor.execute(query, (username,))
+            row = cursor.fetchone()
+            return row[0]
+        except Error as e:
+            st.error(f"Error getting user's word: {e}")
+        finally:
+            if cursor is not None:
+                cursor.close()
+            conn.close()
+        return False
+
+def get_user_words(user_id):
+    conn = get_connection()
+    cursor = None
+    if conn:
+        try:
+            cursor = conn.cursor()
+            query = "SELECT name FROM words WHERE user_id = %s"
+            cursor.execute(query, (user_id,))
+            return [row[0] for row in cursor.fetchall()]
+        except Error as e:
+            st.error(f"Error getting user's word: {e}")
+        finally:
+            if cursor is not None:
+                cursor.close()
+            conn.close()
+     return []
 
 def getWordsList(user_id, num_words):
     conn = get_connection()
@@ -67,6 +100,7 @@ def getWordsList(user_id, num_words):
     if conn:
         try:
             cursor = conn.cursor()
+
             # num_wordsの数だけランダムに単語を取得する, 現在のユーザーの単語帳のみを取得する
             query = "SELECT word_name FROM words WHERE user_id = %s ORDER BY RAND() LIMIT %s"
             cursor.execute(query, (user_id, num_words))
@@ -79,6 +113,20 @@ def getWordsList(user_id, num_words):
                 cursor.close()
             conn.close()
     return []
+
+def get_translation(user_id, name):
+    conn = get_connection()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            query = "SELECT ja_mean FROM words WHERE user_id = %s AND name = %s"
+            cursor.execute(query, (user_id, name))
+            result = cursor.fetchone()
+            if result is not None:
+                return result
+        except Error as e:
+            st.error(f"Error getting translation: {e}")
+
 
 
 def get_user_id(username):
@@ -99,6 +147,7 @@ def get_user_id(username):
                 cursor.close()
             conn.close()
     return None
+
 
 
 def add_word(words_list, translated_list, user_id):
@@ -138,3 +187,4 @@ def show_jawords_list():
                 cursor.close()
             conn.close()
     return []
+

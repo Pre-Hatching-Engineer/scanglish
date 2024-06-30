@@ -1,6 +1,7 @@
 -- init.sql
 
-CREATE DATABASE IF NOT EXISTS scanglish_db;
+CREATE DATABASE IF NOT EXISTS scanglish_db
+
 USE scanglish_db;
 
 CREATE TABLE IF NOT EXISTS users (
@@ -8,7 +9,8 @@ CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(255) NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+)DEFAULT CHARACTER SET utf8mb4
+ DEFAULT COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS words (
     word_id INT AUTO_INCREMENT PRIMARY KEY,
