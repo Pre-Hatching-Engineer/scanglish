@@ -1,7 +1,7 @@
 import io
 import re
 import sys
-
+import requests
 import pytesseract
 import streamlit as st
 from PIL import Image
@@ -25,10 +25,35 @@ def image_to_text(image):
 def text_cleaning(text):
     # textをすべて小文字に変換
     text = text.lower()
-    text = re.sub(r"[^a-z]", "", text)
-    # 空白ごとにsetに変換し、重複を削除
-    words = set(text.split())
+    # アルファベットとスペース以外の文字を削除
+    text = re.sub(r"[^a-z ]", "", text)
+    # スペースを改行に変換
+    text = text.replace(" ", "\n")
+    # 改行ごとに分割し、重複を削除
+    words = set(text.split("\n"))
     return words
+
+def get_translation(words_list):
+    # 翻訳後のリストを取得する
+    translated_list = []
+    target_lang = "JA"
+    DEEPL_API_KEY = "9aa834ef-c010-4c82-9975-e25ba7f23744:fx"  # APIキーを設定
+    text_to_translate = "\n".join(words_list)  # 単語を改行で区切って一度に翻訳
+    params = {
+        'auth_key': DEEPL_API_KEY,
+        'text': text_to_translate,
+        'target_lang': target_lang
+    }
+    response = requests.post("https://api-free.deepl.com/v2/translate", data=params)
+    if response.status_code == 200:
+        translated_texts = response.json()['translations'][0]['text'].split("\n")
+        translated_list.extend(translated_texts)
+    else:
+        st.write("Failed to translate")
+        translated_list = [None] * len(words_list)  # 翻訳に失敗した場合はNoneを追加
+    
+    return translated_list
+    
 
 
 def scanImage():
@@ -57,6 +82,9 @@ def scanImage():
             words_list = list(words)
             st.write(words_list)
             print(type(words_list))
+            get_translation(words_list)
+            st.write(get_translation(words_list))
+            # print(get_translation(words_list))
 
 
 if __name__ == "__main__":
