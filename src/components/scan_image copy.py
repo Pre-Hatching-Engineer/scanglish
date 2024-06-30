@@ -3,7 +3,7 @@ import re
 import sys
 import os
 import requests
-from database import add_word, get_user_id
+from database import add_word, get_user_id, show_jawords_list
 import pytesseract
 import streamlit as st
 import streamlit as st
@@ -79,29 +79,21 @@ def scanImage():
 
     # col2にテキストを表示
     with col2:
-        st.header("Extracted Words")
+        st.header("Extracted Text")
         if uploaded_file is not None:
             text = image_to_text(uploaded_file)
-            # st.write(text)
+            st.write(text)
             stopwords = load_stopwords()
             words = text_cleaning(text, stopwords)
-            translated_list = get_translation(list(words))
-            translation_dict = dict(zip(words, translated_list))
-            selected_words = []
-            st.write("select words to add:")
-            selected_translations = []
-            for word in words:
-                if st.checkbox(word):
-                    selected_words.append(word)
-                    st.write(f"{word} - {translation_dict[word]}")
-
-            selected_translations = [translation_dict[word] for word in selected_words]
-            st.write("Selected words:", selected_words)
-            st.write("Translated words:", selected_translations)
-
-            if st.button("Add selected words"):
-                user_id = get_user_id(st.session_state.username)
-                add_word(selected_words, selected_translations, user_id)
+            words_list = list(words)
+            st.write(words_list)
+            translated_list = get_translation(words_list)
+            st.write(translated_list)
+            user_id = get_user_id(st.session_state.username)
+            add_word(words_list, translated_list, user_id)
+            # テスト
+            # result = show_jawords_list()
+            # print(result)
 
 
 if __name__ == "__main__":
