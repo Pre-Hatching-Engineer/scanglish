@@ -7,7 +7,7 @@ load_dotenv(override=True)
 sys.path.append(os.pardir)  # 親ディレクトリのファイルをインポートするための設定
 
 from openai import OpenAI
-from database import getWordsList
+from database import getWordsList, get_user_id
 
 client = OpenAI(
     api_key=os.getenv("OPENAI_API_KEY"),
@@ -40,6 +40,7 @@ def generateSentence_by_openai(words_list, difficulty, theme="一般的な話題
     - なるべく自然な文章となるように心がけてください。
     - 質問で返さないこと
     - 出力に英単語リスト、難易度、テーマを含めないこと
+    - 英単語リストの単語は「*」で囲ってください。
     """
     print(f"words_list: {words_list}")
     print(f"difficulty: {difficulty}")
@@ -84,7 +85,8 @@ def generateSentence():
                 st.warning("難しさを選択してください")
             else:
                 # ここで単語を取ってくる
-                words_list = ["apple", "banana", "cherry"]
+                user_id = get_user_id(st.session_state.username)
+                words_list = getWordsList(user_id, length)
                 if theme:
                     sentence_en, sentence_ja = generateSentence_by_openai(words_list, difficulty, theme)
                 else:

@@ -61,14 +61,14 @@ def check_user(username, password_hash):
     return False
 
 
-def getWordsList(num_words, user_id):
+def getWordsList(user_id, num_words):
     conn = get_connection()
     cursor = None
     if conn:
         try:
             cursor = conn.cursor()
             # num_wordsの数だけランダムに単語を取得する, 現在のユーザーの単語帳のみを取得する
-            query = "SELECT word FROM words WHERE user_id = %s ORDER BY RAND() LIMIT %s"
+            query = "SELECT word_name FROM words WHERE user_id = %s ORDER BY RAND() LIMIT %s"
             cursor.execute(query, (user_id, num_words))
             # 単語のリストを返す
             return [row[0] for row in cursor.fetchall()]
