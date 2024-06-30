@@ -58,12 +58,22 @@ def check_user(username, password_hash):
     return False
 
 
-def add_word(username, word):
-    # conn = get_connection()
-    # c = conn.cursor()
-    # c.execute("INSERT INTO words VALUES (?, ?)", (username, word))
-    # conn.commit()
-    pass
+def add_word(username, words_list, translated_list):
+    conn = get_connection()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            # useridを取得
+            query = "INSERT INTO words (user_id, n) VALUES (%s, %s, %s)"
+            for word, translation in zip(words_list, translated_list):
+                cursor.execute(query, (username, word, translation))
+            conn.commit()
+        except Error as e:
+            st.error(f"Error adding word: {e}")
+        finally:
+            if cursor is not None:
+                cursor.close()
+            conn.close()
 
 
 def get_user_words(username):

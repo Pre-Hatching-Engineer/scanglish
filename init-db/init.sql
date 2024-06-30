@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS words (
     word_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     name VARCHAR(255) NOT NULL,
-    ja_mean JSON,
+    ja_mean VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_reviewed TIMESTAMP,
     review_count INT,

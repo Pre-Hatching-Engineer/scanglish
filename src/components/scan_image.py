@@ -3,7 +3,7 @@ import re
 import sys
 import os
 import requests
-
+from database import add_word
 import pytesseract
 import streamlit as st
 import streamlit as st
@@ -90,8 +90,11 @@ def scanImage():
             words = text_cleaning(text, stopwords)
             words_list = list(words)
             st.write(words_list)
-            get_translation(words_list)
-            st.write(get_translation(words_list))
+            translated_list = get_translation(words_list)
+            st.write(translated_list)
+            
+            for word, translated_word in zip(words_list, translated_list):
+                add_word(word, translated_word)
 
 
 if __name__ == "__main__":
