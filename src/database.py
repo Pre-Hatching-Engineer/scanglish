@@ -57,18 +57,54 @@ def check_user(username, password_hash):
             conn.close()
     return False
 
+def get_user_id(username):
+    conn = get_connection()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            query = "SELECT user_id FROM users WHERE username = %s"
+            cursor.execute(query, (username,))
+            row = cursor.fetchone()
+            return row[0]
+        except Error as e:
+            st.error(f"Error getting user's word: {e}")
+        finally:
+            if cursor is not None:
+                cursor.close()
+            conn.close()
+        return False
+
+def get_user_words(user_id):
+    conn = get_connection()
+    cursor = None
+    if conn:
+        try:
+            cursor = conn.cursor()
+            query = "SELECT name FROM words WHERE user_id = %s"
+            cursor.execute(query, (user_id,))
+            return [row[0] for row in cursor.fetchall()]
+        except Error as e:
+            st.error(f"Error getting user's word: {e}")
+        finally:
+            if cursor is not None:
+                cursor.close()
+            conn.close()
+    return []
+
 def get_translation(user_id, name):
     conn = get_connection()
     if conn:
         try:
             cursor = conn.cursor()
-            query = "SET * FROM words WHERE user_id = %s AND name = %s"
+            query = "SELECT ja_mean FROM words WHERE user_id = %s AND name = %s"
             cursor.execute(query, (user_id, name))
-            return cursor.fetchone is not None
+            result = cursor.fetchone()
+            if result is not None:
+                return result
         except Error as e:
             st.error(f"Error getting translation: {e}")
         finally:
             if cursor is not None:
                 cursor.close()
             conn.close()
-    return False
+    return None
