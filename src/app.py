@@ -3,9 +3,10 @@ import streamlit as st
 # セッションの初期化
 if "username" not in st.session_state:
     st.session_state.username = None
-from auth import authenticate
-from components import word_search, generate_sentence, scan_image
 from st_on_hover_tabs import on_hover_tabs
+
+from auth import authenticate
+from components import generate_sentence, scan_image, word_search
 
 
 def main():
@@ -32,7 +33,10 @@ def main():
             word_search.wordSearch()
         elif tabs == "文章生成":
             generate_sentence.generateSentence()
-        st.sidebar.markdown(f"<h1 style='color: white;'>Welcome, {st.session_state['username']}!</h1>", unsafe_allow_html=True)
+        st.sidebar.markdown(
+            f"<h1 style='color: white;'>Welcome, {st.session_state['username']}!</h1>", unsafe_allow_html=True
+        )
+
         st.sidebar.button("Logout", on_click=logout)
 
 

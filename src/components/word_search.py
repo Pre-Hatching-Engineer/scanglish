@@ -3,6 +3,7 @@ import pandas as pd
 from database import get_user_id,get_user_words,get_translation
 from functools import partial
 
+
 def clearText():
     st.session_state.text_input = ""
 
@@ -18,6 +19,7 @@ def searchText(user_id):
         st.error(f"'{st.session_state.text_input}' is not in your word list.")
 
 def wordSearch():
+
     if st.session_state.username is None:
         return
     else:
