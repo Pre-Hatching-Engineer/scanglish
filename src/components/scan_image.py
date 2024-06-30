@@ -3,7 +3,7 @@ import re
 import sys
 import os
 import requests
-from database import add_word
+from database import add_word, get_user_id, show_jawords_list
 import pytesseract
 import streamlit as st
 import streamlit as st
@@ -24,10 +24,12 @@ def image_to_text(image):
     text = pytesseract.image_to_string(img, lang="jpn")
     return text
 
+
 def load_stopwords():
-    with open('src/components/stopwords.txt', 'r') as file:
+    with open("src/components/stopwords.txt", "r") as file:
         stopwords = set(line.strip() for line in file)
     return stopwords
+
 
 def text_cleaning(text, stopwords):
     # textをすべて小文字に変換
@@ -49,21 +51,16 @@ def get_translation(words_list):
     target_lang = "JA"
     DEEPL_API_KEY = "9aa834ef-c010-4c82-9975-e25ba7f23744:fx"  # APIキーを設定
     text_to_translate = "\n".join(words_list)  # 単語を改行で区切って一度に翻訳
-    params = {
-        'auth_key': DEEPL_API_KEY,
-        'text': text_to_translate,
-        'target_lang': target_lang
-    }
+    params = {"auth_key": DEEPL_API_KEY, "text": text_to_translate, "target_lang": target_lang}
     response = requests.post("https://api-free.deepl.com/v2/translate", data=params)
     if response.status_code == 200:
-        translated_texts = response.json()['translations'][0]['text'].split("\n")
+        translated_texts = response.json()["translations"][0]["text"].split("\n")
         translated_list.extend(translated_texts)
     else:
         st.write("Failed to translate")
         translated_list = [None] * len(words_list)  # 翻訳に失敗した場合はNoneを追加
-    
+
     return translated_list
-    
 
 
 def scanImage():
@@ -92,9 +89,11 @@ def scanImage():
             st.write(words_list)
             translated_list = get_translation(words_list)
             st.write(translated_list)
-            
-            for word, translated_word in zip(words_list, translated_list):
-                add_word(word, translated_word)
+            user_id = get_user_id(st.session_state.username)
+            add_word(words_list, translated_list, user_id)
+            # テスト
+            # result = show_jawords_list()
+            # print(result)
 
 
 if __name__ == "__main__":
