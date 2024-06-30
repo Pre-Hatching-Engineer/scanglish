@@ -58,17 +58,25 @@ def check_user(username, password_hash):
     return False
 
 
-def add_word(username, word):
-    # conn = get_connection()
-    # c = conn.cursor()
-    # c.execute("INSERT INTO words VALUES (?, ?)", (username, word))
-    # conn.commit()
-    pass
-
-
-def get_user_words(username):
-    # conn = get_connection()
-    # c = conn.cursor()
-    # c.execute("SELECT word FROM words WHERE username = ?", (username,))
-    # return [row[0] for row in c.fetchall()]
-    pass
+def getWordsList(num_words, username):
+    conn = get_connection()
+    cursor = None
+    if conn:
+        try:
+            cursor = conn.cursor()
+            # usernameからuser_idを取得する
+            query = "SELECT user_id FROM users WHERE username = %s"
+            cursor.execute(query, (username,))
+            user_id = cursor.fetchone()[0]
+            # num_wordsの数だけランダムに単語を取得する, 現在のユーザーの単語帳のみを取得する
+            query = "SELECT word FROM words WHERE user_id = %s ORDER BY RAND() LIMIT %s"
+            cursor.execute(query, (user_id, num_words))
+            # 単語のリストを返す
+            return [row[0] for row in cursor.fetchall()]
+        except Error as e:
+            st.error(f"Error getting words list: {e}")
+        finally:
+            if cursor is not None:
+                cursor.close()
+            conn.close()
+    return []
