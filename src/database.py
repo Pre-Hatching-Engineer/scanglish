@@ -57,18 +57,18 @@ def check_user(username, password_hash):
             conn.close()
     return False
 
-
-def add_word(username, word):
-    # conn = get_connection()
-    # c = conn.cursor()
-    # c.execute("INSERT INTO words VALUES (?, ?)", (username, word))
-    # conn.commit()
-    pass
-
-
-def get_user_words(username):
-    # conn = get_connection()
-    # c = conn.cursor()
-    # c.execute("SELECT word FROM words WHERE username = ?", (username,))
-    # return [row[0] for row in c.fetchall()]
-    pass
+def get_translation(user_id, name):
+    conn = get_connection()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            query = "SET * FROM words WHERE user_id = %s AND name = %s"
+            cursor.execute(query, (user_id, name))
+            return cursor.fetchone is not None
+        except Error as e:
+            st.error(f"Error getting translation: {e}")
+        finally:
+            if cursor is not None:
+                cursor.close()
+            conn.close()
+    return False
