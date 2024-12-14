@@ -19,7 +19,7 @@ func main() {
 	e := echo.New()
 	e.HideBanner = true
 	e.HidePort = true
-	e.Logger.SetLevel(log.Info())
+	e.Logger.SetLevel(log.INFO)
 	e.Use(middleware.Recover())
 	e.Use(middleware.Secure())
 
@@ -31,7 +31,6 @@ func main() {
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: origins,
 	}))
-
 	// auth
 	e.Use(appmiddle.AuthMiddleware())
 
